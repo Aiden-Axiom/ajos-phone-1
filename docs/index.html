@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple Drag-to-Snap Pages</title>
+<style>
+  body, html {
+    margin: 0; padding: 0; height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column; font-family: sans-serif;
+    background: url('https://lh3.googleusercontent.com/fife/ALs6j_FMqb7hmEPKTy1VKfvFL8Oqr9jBN4kVRfvU9LK6VT1_JMOvNWhTiJoZtFa3Gp3DpJg6wU2ROdfXcIHgJVmE-YRKe5HHhdqyPax2XYTdNcZZdmboGnBkZ9o7FNrOP8ogVOMhYf9AaqFtLKMdOY2o0yG-v6KvbdlQDxmtT_F1S1RTSRHEa9KekP_41V_bPY4LYqZ-CRuWi6y_GQGDXAiUiolyGxMb677WpVzztS0TYSaQGJlL9OnEhqvIahyxlf0Oy-L31c90qWuRSn9r5GtzhbvJem7ksIFonb3bUEuqThqip0jH0m8973orgRuWJnf_KHhqmXx2In2WSxbzEIU4soj_88z1_NdgYyDg4mMvH7YIXOn4XN6Yt2WQYC3AHmZeVv5xJf57sRj8SzAjT_DOqSXdSboxSZKy7mmEqdLx41VoQy2-H7XNtcrfqV8CObqofMi2Y5v-n5wqe2q4I-OP8tV_3ELOT4qLsyI3VpUaGOUj0iQtP_ms30fekVdQGLfMFmWjSzuKuZk2kR5XZOLWQTXrcos7lGk_pZBfBzQ_wS_vBJCMaTvY1uOjRW1F_Y7FY6Hu6a2laSgw-saaRdHW2upOncPhv6wG1n0kRO8lStK-sfkrV_eLRsvlZqFWVbSATFtElQvehAi3HOwCYumHngfJP2iXgGBeqYK-bB6EnXedOPdi0Oij_oJsI7NTINn7y8jQtsKVKUxJGEcUm9mLCuB-q0QOhgUjLmkpwigKIgDCEp7hN3y8xFQLefFDbSADb3ud9Abuk2YYBO5SKtq7Mqji20qgfUsuPg4_0IMmpipBz6IMivdlz6-UTHR5lnoyGNVrEBVmNwPeTWI6SbFQrVn7XpReeW3kuRAOV5Q5zx9uioxfXa3pOBnaF-9szpzeAs6Qjv2K1r89vLWC6R0l733gh7lVs374jIjZiZl3qvTS8beYZgp9DagrLKtXkIVQrP_pMWd9AeOyl2QzoDf4NEis7Sje2RYTyMRjLy2xbmwRsEL-7_-NWGvEgjolSBBbIPnXnJf5aDSxK6rlQB9rmLvIOOdPRb3H60HumXR7BsIw9EZ2Nv3Gp4Tb4O2dOcZUblBUxMaKgnXeSu_Egfe9EqcQ5h1ioM22_7TJAEIOr5QYfPD53is2vgkx_wzu8olfKkfgeQI7-whN_tvxhCb5lQyyAcqNS_2WLVOsaJzMepKtsg1P7Dlo_ws5CEaY_8t8BsR8mPHS2Wrz1QCbf3U0Rxo3qBaRIFaM1UdBuDf8f_Cg0godzWyXYcALYC3QzmxcirzN3ZuI68gy6E6gAkM5MMRastfz28A9shnyWx1Yc_ybp7BD6vaFzpFEZNuSwMofJFc6NhBIEs2e9X-ms2aCTKDVQBo9SpTiS5s0TirvbxaMxKKMQow9JrrV_MWqr9tflMyXwmQ-2DQolZMYar-6tilbQjB7EWGQYY8KaKX1Wb5OAgyj4Y8urJe-XlgFAFwhNE0YjDj3OwPcEeWkuGXZtkLR5hc6qee1NOAA-1FojYIycuw8NJ-uarIqQpXkWvr82ipalm1qt2IE1co00DqXYJ8arlHXqGSh62GAmv6ilFQMkpbSGXgENv_EdyVyMlLlLrF9Yz9q6XthR4PLM7I2rmulag=s1024') no-repeat center;
+    color: white;
+    background-size: cover;
+    transition: all 0.3s ease;
+    user-select: none;
+  }
+  #pagesContainer {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  #pages {
+    display: flex;
+    height: 100%;
+    transition: transform 0.3s ease;
+  }
+  .page {
+    flex-shrink: 0;
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    background: #222;
+    gap: 150px;
+    flex-direction: row;
+  }
+
+  .taskbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(200, 200, 200, .25);
+    height: auto;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    display: flex;
+  }
+
+  .app {
+    background-color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 15000px;
+    height: auto;
+    width: auto;
+    cursor: pointer;
+  }
+
+  .app:active {
+    filter: brightness(.7);
+  }
+
+  #desktop-app {
+    transform: scale(2);
+  }
+</style>
+</head>
+<body>
+
+<div id="pagesContainer">
+  <div id="pages">
+    <div class="page" style="background: transparent;">
+      <button id="desktop-app" class="app">📁</button>
+      <button id="desktop-app" class="app">📁</button>
+      <button id="desktop-app" class="app">📁</button>
+      <button id="desktop-app" class="app">📁</button>
+      <button id="desktop-app" class="app">📁</button>
+    </div>
+    <div class="page" style="background: transparent;"></div>
+    <div class="page" style="background: transparent;"></div>
+    <div class="page" style="background: transparent; backdrop-filter: blur(10px);">
+      <button>Hello World! l Click Me!</button>
+    </div>
+  </div>
+</div>
+
+<div class="taskbar">
+  <button class="app">📁</button>
+</div>
+
+<script>
+  const pagesContainer = document.getElementById('pagesContainer');
+  const pages = document.getElementById('pages');
+
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID;
+  const pageCount = pages.children.length;
+  const pageWidth = window.innerWidth;
+  let currentPage = 0;
+
+  function getX(event) {
+    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+  }
+
+  function animation() {
+    pages.style.transform = `translateX(${currentTranslate}px)`;
+    if (isDragging) requestAnimationFrame(animation);
+  }
+
+  function dragStart(event) {
+    isDragging = true;
+    startX = getX(event);
+    pages.style.transition = 'none';
+    animationID = requestAnimationFrame(animation);
+  }
+
+  function dragMove(event) {
+    if (!isDragging) return;
+    const currentX = getX(event);
+    const diff = currentX - startX;
+    currentTranslate = prevTranslate + diff;
+
+    // Boundaries: prevent dragging beyond first and last page
+    const maxTranslate = 0;
+    const minTranslate = -pageWidth * (pageCount - 1);
+    if (currentTranslate > maxTranslate) currentTranslate = maxTranslate;
+    if (currentTranslate < minTranslate) currentTranslate = minTranslate;
+  }
+
+  function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    // Snap logic
+    const movedBy = currentTranslate - prevTranslate;
+
+    if (movedBy < -pageWidth / 3 && currentPage < pageCount -1) {
+      currentPage++;
+    } else if (movedBy > pageWidth / 3 && currentPage > 0) {
+      currentPage--;
+    }
+    snapToPage();
+  }
+
+  function snapToPage() {
+    currentTranslate = -currentPage * pageWidth;
+    prevTranslate = currentTranslate;
+    pages.style.transition = 'transform 0.3s ease';
+    pages.style.transform = `translateX(${currentTranslate}px)`;
+  }
+
+  pagesContainer.addEventListener('touchstart', dragStart);
+  pagesContainer.addEventListener('touchmove', dragMove);
+  pagesContainer.addEventListener('touchend', dragEnd);
+
+  pagesContainer.addEventListener('mousedown', dragStart);
+  pagesContainer.addEventListener('mousemove', dragMove);
+  pagesContainer.addEventListener('mouseup', dragEnd);
+  pagesContainer.addEventListener('mouseleave', dragEnd);
+
+  window.addEventListener('resize', () => {
+    snapToPage();
+  });
+</script>
+
+</body>
+</html>
